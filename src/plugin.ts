@@ -32,15 +32,32 @@ export const OpenKnowledgePlugin: Plugin = async ({ client, directory, worktree 
       }
     },
 
-    'session.idle': async ({ session, messages }) => {
-      const messageText = messages.map(m => m.content).join(' ');
+    'session.idle': async ({ event }) => {
+      // Extract session ID from event (true-mem pattern)
+      const sessionId = event.properties?.info?.id ?? event.properties?.sessionID ?? event.properties?.id;
+      
+      if (!sessionId) {
+        return;
+      }
+
+      // Fetch messages from session API
+      const response = await client.session.messages({ path: { id: sessionId } });
+      const messages = response.data ?? [];
+
+      // Extract text from message parts
+      const messageText = messages
+        .flatMap(m => m.parts ?? [])
+        .filter(part => part.type === 'text' && 'text' in part)
+        .map(part => part.text)
+        .join(' ');
+
       const patternResult = detectPatterns(messageText);
 
       if (!patternResult.type) {
         return;
       }
 
-      const result = pipeline.processSession(messageText, session.id, {
+      const result = pipeline.processSession(messageText, sessionId, {
         messageStart: 0,
         messageEnd: messages.length,
       });
@@ -51,7 +68,7 @@ export const OpenKnowledgePlugin: Plugin = async ({ client, directory, worktree 
             service: 'openknowledge',
             level: 'info',
             message: `Extracted ${result.extracted.length} knowledge objects`,
-            sessionId: session.id,
+            sessionId,
           },
         });
       }

@@ -113,6 +113,16 @@ SQLite Storage
 Nightly Consolidation (dedup, supersede, merge)
 ```
 
+## Prior Art
+
+Inspired by [true-mem](https://github.com/rizal72/true-mem) - a persistent memory plugin for OpenCode with cognitive psychology-based memory management.
+
+openknowledge complements true-mem:
+- **true-mem**: Atomic conversational memories (preferences, constraints, episodic)
+- **openknowledge**: Structured project knowledge (architecture, decisions, timelines, workflows)
+
+Both can be installed together without conflict.
+
 ## License
 
 MIT
