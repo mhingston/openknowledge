@@ -1,0 +1,21 @@
+{
+  "name": "openknowledge",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "vitest",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "^1.0.0",
+    "better-sqlite3": "^12.6.2",
+    "commander": "^13.1.0"
+  }
+}
