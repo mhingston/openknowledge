@@ -19,9 +19,11 @@ Edit `~/.config/opencode/opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["@mhingston5/openknowledge"]
+  "plugin": ["opencode-scheduler", "@mhingston5/openknowledge"]
 }
 ```
+
+**Note:** The `opencode-scheduler` plugin is required to run the nightly consolidation job (7am daily) that deduplicates and merges knowledge entries.
 
 ### Restart OpenCode
 
