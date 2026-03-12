@@ -66,6 +66,7 @@ export function extractKnowledge(
         const content = extractStructuredContent(sentence, classification.classification);
         const importance = calculateImportance(sentence);
 
+        const now = new Date().toISOString();
         const knowledgeObject: KnowledgeObject = {
           id: generateId(classification.classification, title, sessionId),
           type: classification.classification,
@@ -73,11 +74,13 @@ export function extractKnowledge(
           content,
           sourceSessionId: sessionId,
           sourceSpan,
-          extractedAt: new Date().toISOString(),
+          extractedAt: now,
           confidence: classification.confidence,
           importance,
           tags: extractTags(sentence),
           status: 'active',
+          createdAt: now,
+          updatedAt: now,
         };
 
         results.push(knowledgeObject);

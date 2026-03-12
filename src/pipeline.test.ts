@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { KnowledgePipeline } from './pipeline';
-import { DatabaseAdapter } from './database';
-import { KnowledgeObject } from './types';
+import { KnowledgePipeline } from './pipeline.js';
+import { DatabaseAdapter } from './database.js';
+import { KnowledgeObject } from './types.js';
 
 vi.mock('./database', () => {
   return {

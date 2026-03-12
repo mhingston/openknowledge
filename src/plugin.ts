@@ -1,9 +1,10 @@
 import type { Plugin } from '@opencode-ai/plugin';
-import { DatabaseAdapter } from './database';
-import { KnowledgeInjection } from './injection';
-import { KnowledgePipeline } from './pipeline';
-import { KnowledgeRetrieval } from './retrieval';
-import { detectPatterns } from './patterns';
+import { DatabaseAdapter } from './database.js';
+import { KnowledgeInjection } from './injection.js';
+import { KnowledgePipeline } from './pipeline.js';
+import { KnowledgeRetrieval } from './retrieval.js';
+import { detectPatterns } from './patterns.js';
+import { KnowledgeType } from './types.js';
 import { join, dirname } from 'path';
 import { homedir } from 'os';
 import { fileURLToPath } from 'url';
@@ -11,14 +12,14 @@ import { fileURLToPath } from 'url';
 const __dir = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_DB_PATH = join(homedir(), '.config', 'opencode', 'storage', 'project_knowledge.db');
 
-export const OpenKnowledgePlugin: Plugin = async ({ client, directory, worktree }) => {
+export const OpenKnowledgePlugin: Plugin = async ({ client, directory, worktree }: { client: any; directory: string; worktree: string | undefined }) => {
   const db = new DatabaseAdapter(DEFAULT_DB_PATH);
   const injector = new KnowledgeInjection(db, worktree || directory);
   const pipeline = new KnowledgePipeline(db);
   const retrieval = new KnowledgeRetrieval(db);
 
   return {
-    'session.created': async ({ session }) => {
+    'session.created': async ({ session }: { session: any }) => {
       const xml = injector.generateXML(10);
       if (xml.trim() !== '<openknowledge count="0" />') {
         await client.app.log({
@@ -32,7 +33,7 @@ export const OpenKnowledgePlugin: Plugin = async ({ client, directory, worktree 
       }
     },
 
-    'session.idle': async ({ event }) => {
+    'session.idle': async ({ event }: { event: any }) => {
       // Extract session ID from event (true-mem pattern)
       const sessionId = event.properties?.info?.id ?? event.properties?.sessionID ?? event.properties?.id;
       
@@ -46,9 +47,9 @@ export const OpenKnowledgePlugin: Plugin = async ({ client, directory, worktree 
 
       // Extract text from message parts
       const messageText = messages
-        .flatMap(m => m.parts ?? [])
-        .filter(part => part.type === 'text' && 'text' in part)
-        .map(part => part.text)
+        .flatMap((m: any) => m.parts ?? [])
+        .filter((part: any) => part.type === 'text' && 'text' in part)
+        .map((part: any) => part.text)
         .join(' ');
 
       const patternResult = detectPatterns(messageText);
@@ -84,7 +85,7 @@ export const OpenKnowledgePlugin: Plugin = async ({ client, directory, worktree 
         async execute(args: { limit?: number; type?: string }) {
           let knowledge;
           if (args.type) {
-            knowledge = db.getByType(args.type).slice(0, args.limit || 20);
+            knowledge = db.getByType(args.type as KnowledgeType).slice(0, args.limit || 20);
           } else {
             knowledge = db.getAllKnowledge().slice(0, args.limit || 20);
           }

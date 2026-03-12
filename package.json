@@ -1,20 +1,35 @@
 {
-  "name": "openknowledge",
-  "version": "0.0.1",
+  "name": "@mhingston/openknowledge",
+  "version": "0.1.0",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "files": ["dist", "src"],
   "scripts": {
     "test": "vitest",
     "build": "tsc"
   },
+  "description": "Project knowledge memory system for OpenCode",
+  "keywords": [
+    "opencode",
+    "plugin",
+    "memory",
+    "knowledge",
+    "ai"
+  ],
+  "author": "Mark Hingston",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mhingston/openknowledge"
+  },
   "devDependencies": {
     "@types/node": "^22.15.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18",
-    "ts-node": "^10.9.2"
+    "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@opencode-ai/plugin": "^1.0.0",
+    "@opencode-ai/plugin": "^1.2.24",
     "better-sqlite3": "^12.6.2",
     "commander": "^13.1.0"
   }

@@ -1,5 +1,5 @@
-import { DatabaseAdapter } from './database';
-import { KnowledgeObject, KnowledgeStatus } from './types';
+import { DatabaseAdapter } from './database.js';
+import { KnowledgeObject, KnowledgeStatus } from './types.js';
 
 interface DuplicatePair {
   pair: [string, string];

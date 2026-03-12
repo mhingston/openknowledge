@@ -1,4 +1,4 @@
-import { KnowledgeType } from './types';
+import { KnowledgeType } from './types.js';
 
 interface ClassificationResult {
   classification: KnowledgeType | null;

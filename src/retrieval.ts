@@ -1,4 +1,4 @@
-import { KnowledgeObject, KnowledgeType } from './types';
+import { KnowledgeObject, KnowledgeType } from './types.js';
 
 interface DatabaseAdapter {
   getAllKnowledge(): KnowledgeObject[];

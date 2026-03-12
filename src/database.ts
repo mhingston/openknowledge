@@ -1,8 +1,8 @@
 import Database from 'better-sqlite3';
-import { join, dirname, resolve } from 'path';
+import { join, dirname } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { homedir } from 'os';
-import { KnowledgeObject, KnowledgeType, KnowledgeStatus } from './types';
+import { KnowledgeType, KnowledgeStatus } from './types.js';
 
 export interface KnowledgeObject {
   id: string;

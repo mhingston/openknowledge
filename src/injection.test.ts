@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { KnowledgeInjection } from '../src/injection';
-import { KnowledgeObject } from '../src/types';
+import { KnowledgeInjection } from '../src/injection.js';
+import { KnowledgeObject } from '../src/types.js';
 
 interface TestDatabaseAdapter {
   createKnowledge(k: KnowledgeObject): void;
@@ -56,6 +56,7 @@ class TestInMemoryDatabase implements TestDatabaseAdapter {
 const createTestKnowledge = (
   overrides: Partial<KnowledgeObject> = {}
 ): KnowledgeObject => {
+  const now = new Date().toISOString();
   const base: KnowledgeObject = {
     id: `test-${Math.random().toString(36).substr(2, 9)}`,
     type: 'decision',
@@ -63,11 +64,13 @@ const createTestKnowledge = (
     content: { description: 'Test content' },
     sourceSessionId: 'session-123',
     sourceSpan: { messageStart: 0, messageEnd: 10 },
-    extractedAt: new Date().toISOString(),
+    extractedAt: now,
     confidence: 0.8,
     importance: 0.5,
     tags: [],
     status: 'active',
+    createdAt: now,
+    updatedAt: now,
   };
   return { ...base, ...overrides };
 };
@@ -83,6 +86,7 @@ describe('KnowledgeInjection', () => {
 
   describe('generateXML', () => {
     it('should generate valid XML with knowledge objects', () => {
+      const now = new Date().toISOString();
       const k1: KnowledgeObject = {
         id: 'arch-1',
         type: 'architecture',
@@ -90,11 +94,13 @@ describe('KnowledgeInjection', () => {
         content: { framework: 'Next.js', database: 'SQLite' },
         sourceSessionId: 'session-1',
         sourceSpan: { messageStart: 10, messageEnd: 20 },
-        extractedAt: new Date().toISOString(),
+        extractedAt: now,
         confidence: 0.9,
         importance: 0.85,
         tags: ['backend', 'architecture'],
         status: 'active',
+        createdAt: now,
+        updatedAt: now,
       };
 
       const k2: KnowledgeObject = {
@@ -104,11 +110,13 @@ describe('KnowledgeInjection', () => {
         content: { decision: 'Use SQLite for simplicity' },
         sourceSessionId: 'session-2',
         sourceSpan: { messageStart: 5, messageEnd: 15 },
-        extractedAt: new Date().toISOString(),
+        extractedAt: now,
         confidence: 0.88,
         importance: 0.80,
         tags: ['database', 'decision'],
         status: 'active',
+        createdAt: now,
+        updatedAt: now,
       };
 
       db.createKnowledge(k1);
@@ -125,6 +133,7 @@ describe('KnowledgeInjection', () => {
     });
 
     it('should escape XML special characters in content', () => {
+      const now = new Date().toISOString();
       const k: KnowledgeObject = {
         id: 'xml-test',
         type: 'architecture',
@@ -132,11 +141,13 @@ describe('KnowledgeInjection', () => {
         content: { description: 'Use <Component> & handle "quotes"' },
         sourceSessionId: 'session-1',
         sourceSpan: { messageStart: 0, messageEnd: 5 },
-        extractedAt: new Date().toISOString(),
+        extractedAt: now,
         confidence: 0.9,
         importance: 0.8,
         tags: ['test', 'xml'],
         status: 'active',
+        createdAt: now,
+        updatedAt: now,
       };
 
       db.createKnowledge(k);
@@ -159,6 +170,7 @@ describe('KnowledgeInjection', () => {
     it('should include worktree attribute', () => {
       const worktree = '/home/mark/.local/share/opencode/storage';
       const injectionWithWorktree = new KnowledgeInjection(db as any, worktree);
+      const now = new Date().toISOString();
 
       const k: KnowledgeObject = {
         id: 'test-1',
@@ -167,11 +179,13 @@ describe('KnowledgeInjection', () => {
         content: {},
         sourceSessionId: 'session-1',
         sourceSpan: { messageStart: 0, messageEnd: 5 },
-        extractedAt: new Date().toISOString(),
+        extractedAt: now,
         confidence: 0.9,
         importance: 0.8,
         tags: [],
         status: 'active',
+        createdAt: now,
+        updatedAt: now,
       };
 
       db.createKnowledge(k);
@@ -183,6 +197,7 @@ describe('KnowledgeInjection', () => {
 
     it('should respect maxMemories parameter', () => {
       for (let i = 0; i < 5; i++) {
+        const now = new Date().toISOString();
         db.createKnowledge({
           id: `test-${i}`,
           type: 'architecture',
@@ -190,11 +205,13 @@ describe('KnowledgeInjection', () => {
           content: { index: i },
           sourceSessionId: 'session-1',
           sourceSpan: { messageStart: 0, messageEnd: 5 },
-          extractedAt: new Date().toISOString(),
+          extractedAt: now,
           confidence: 0.9,
           importance: 0.9 - i * 0.1,
           tags: ['test'],
           status: 'active',
+          createdAt: now,
+          updatedAt: now,
         });
       }
 
@@ -207,6 +224,7 @@ describe('KnowledgeInjection', () => {
   describe('quota allocation', () => {
     it('should allocate minimum 30% architecture', () => {
       for (let i = 0; i < 3; i++) {
+        const now = new Date().toISOString();
         db.createKnowledge({
           id: `arch-${i}`,
           type: 'architecture',
@@ -214,15 +232,18 @@ describe('KnowledgeInjection', () => {
           content: {},
           sourceSessionId: 'session-1',
           sourceSpan: { messageStart: 0, messageEnd: 5 },
-          extractedAt: new Date().toISOString(),
+          extractedAt: now,
           confidence: 0.9,
           importance: 0.9,
           tags: [],
           status: 'active',
+          createdAt: now,
+          updatedAt: now,
         });
       }
 
       for (let i = 0; i < 7; i++) {
+        const now = new Date().toISOString();
         db.createKnowledge({
           id: `other-${i}`,
           type: 'decision',
@@ -230,11 +251,13 @@ describe('KnowledgeInjection', () => {
           content: {},
           sourceSessionId: 'session-1',
           sourceSpan: { messageStart: 0, messageEnd: 5 },
-          extractedAt: new Date().toISOString(),
+          extractedAt: now,
           confidence: 0.9,
           importance: 0.95,
           tags: [],
           status: 'active',
+          createdAt: now,
+          updatedAt: now,
         });
       }
 
@@ -245,6 +268,7 @@ describe('KnowledgeInjection', () => {
 
     it('should allocate minimum 30% decisions', () => {
       for (let i = 0; i < 3; i++) {
+        const now = new Date().toISOString();
         db.createKnowledge({
           id: `dec-${i}`,
           type: 'decision',
@@ -252,15 +276,18 @@ describe('KnowledgeInjection', () => {
           content: {},
           sourceSessionId: 'session-1',
           sourceSpan: { messageStart: 0, messageEnd: 5 },
-          extractedAt: new Date().toISOString(),
+          extractedAt: now,
           confidence: 0.9,
           importance: 0.9,
           tags: [],
           status: 'active',
+          createdAt: now,
+          updatedAt: now,
         });
       }
 
       for (let i = 0; i < 7; i++) {
+        const now = new Date().toISOString();
         db.createKnowledge({
           id: `other-${i}`,
           type: 'architecture',
@@ -268,11 +295,13 @@ describe('KnowledgeInjection', () => {
           content: {},
           sourceSessionId: 'session-1',
           sourceSpan: { messageStart: 0, messageEnd: 5 },
-          extractedAt: new Date().toISOString(),
+          extractedAt: now,
           confidence: 0.9,
           importance: 0.95,
           tags: [],
           status: 'active',
+          createdAt: now,
+          updatedAt: now,
         });
       }
 

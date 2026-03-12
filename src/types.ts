@@ -14,4 +14,6 @@ export interface KnowledgeObject {
   importance: number;
   tags: string[];
   status: KnowledgeStatus;
+  createdAt: string;
+  updatedAt: string;
 }

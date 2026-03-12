@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { KnowledgeConsolidator } from './consolidate';
-import { KnowledgeObject } from './types';
+import { KnowledgeConsolidator } from './consolidate.js';
+import { KnowledgeObject } from './types.js';
 
 class InMemoryDatabase {
   private store = new Map<string, KnowledgeObject>();
@@ -46,6 +46,7 @@ class InMemoryDatabase {
 const createTestKnowledge = (
   overrides: Partial<KnowledgeObject> = {}
 ): KnowledgeObject => {
+  const now = new Date().toISOString();
   const base: KnowledgeObject = {
     id: `test-${Math.random().toString(36).substr(2, 9)}`,
     type: 'decision',
@@ -53,11 +54,13 @@ const createTestKnowledge = (
     content: { description: 'Test content' },
     sourceSessionId: 'session-123',
     sourceSpan: { messageStart: 0, messageEnd: 10 },
-    extractedAt: new Date().toISOString(),
+    extractedAt: now,
     confidence: 0.8,
     importance: 0.5,
     tags: [],
     status: 'active',
+    createdAt: now,
+    updatedAt: now,
   };
   return { ...base, ...overrides };
 };

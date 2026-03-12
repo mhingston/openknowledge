@@ -1,8 +1,8 @@
-import { KnowledgeObject } from './types';
-import { DatabaseAdapter } from './database';
-import { detectPatterns } from './patterns';
-import { classifyKnowledge } from './classifier';
-import { extractKnowledge } from './extractor';
+import { KnowledgeObject } from './types.js';
+import { DatabaseAdapter } from './database.js';
+import { detectPatterns } from './patterns.js';
+import { classifyKnowledge } from './classifier.js';
+import { extractKnowledge } from './extractor.js';
 
 interface PipelineResult {
   extracted: KnowledgeObject[];
