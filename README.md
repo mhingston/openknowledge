@@ -13,6 +13,23 @@ A project knowledge memory plugin for OpenCode that extracts, stores, and retrie
 
 ## Installation
 
+### From npm
+
+1. Install from npm:
+```bash
+npm install @mhingston5/openknowledge
+```
+
+2. Add to your `opencode.json`:
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["@mhingston5/openknowledge"]
+}
+```
+
+3. Restart OpenCode - plugin auto-loads
+
 ### From local files
 
 Place the plugin in your OpenCode plugins directory:
@@ -22,10 +39,7 @@ mkdir -p ~/.config/opencode/plugins
 cp -r openknowledge ~/.config/opencode/plugins/
 ```
 
-### From npm (after publishing)
-
-Add to your `opencode.json`:
-
+Add to `opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",

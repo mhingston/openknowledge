@@ -1,9 +1,12 @@
 {
-  "name": "@mhingston/openknowledge",
-  "version": "0.1.0",
+  "name": "@mhingston5/openknowledge",
+  "version": "0.1.1",
   "type": "module",
   "main": "dist/index.js",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "test": "vitest",
     "build": "tsc"
